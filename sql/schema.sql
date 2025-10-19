@@ -1,8 +1,13 @@
 -- PuckChat Database Schema
 
--- Users table for anonymous sessions
+-- Users table with authentication
 CREATE TABLE users (
     id VARCHAR(50) PRIMARY KEY,
+    username VARCHAR(30) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    gender ENUM('male', 'female') NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    state VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     status ENUM('online', 'offline', 'chatting') DEFAULT 'online'

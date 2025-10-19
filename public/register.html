@@ -177,35 +177,91 @@
             }
         }
         
-        // Real-time validation
+        // Real-time validation with availability check
+        let usernameTimeout;
         document.getElementById('username').addEventListener('input', function() {
-            const error = validateUsername(this.value);
-            showError('username', error);
+            const username = this.value;
+            const error = validateUsername(username);
+            
+            if (error) {
+                showError('username', error);
+                return;
+            }
+            
+            // Clear previous timeout
+            clearTimeout(usernameTimeout);
+            
+            // Check availability after 500ms delay
+            usernameTimeout = setTimeout(() => {
+                if (username.length >= 3) {
+                    checkUsernameAvailability(username);
+                }
+            }, 500);
         });
+        
+        function checkUsernameAvailability(username) {
+            const formData = new FormData();
+            formData.append('username', username);
+            
+            fetch('api/check-username.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.available) {
+                    showError('username', '');
+                    document.getElementById('username-error').innerHTML = '<span style="color: green;">✅ Username available</span>';
+                    document.getElementById('username-error').style.display = 'block';
+                } else {
+                    showError('username', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error checking username:', error);
+            });
+        }
         
         document.getElementById('password').addEventListener('input', function() {
             const error = validatePassword(this.value);
             showError('password', error);
         });
         
-        // Form validation
+        // Form validation and submission
         document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Basic validation
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            const gender = document.getElementById('gender').value;
+            const country = document.getElementById('country').value;
+            const state = document.getElementById('state').value;
             
-            const usernameError = validateUsername(username);
-            const passwordError = validatePassword(password);
-            
-            showError('username', usernameError);
-            showError('password', passwordError);
-            
-            if (usernameError || passwordError) {
-                e.preventDefault();
-                return false;
+            if (!username || !password || !gender || !country || !state) {
+                alert('Please fill in all fields');
+                return;
             }
             
-            e.preventDefault();
-            console.log('Form submitted');
+            const formData = new FormData(this);
+            
+            fetch('api/register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data);
+                if (data.success) {
+                    window.location.href = 'dashboard.php';
+                } else {
+                    alert('Registration failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Registration failed. Please try again.');
+            });
         });
         
         // Gender button selection
