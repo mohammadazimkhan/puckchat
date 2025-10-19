@@ -1,0 +1,22 @@
+# InfinityFree specific
+.htaccess
+error_log
+
+# Configuration files with sensitive data
+includes/config.php
+
+# Temporary files
+*.tmp
+*.log
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
