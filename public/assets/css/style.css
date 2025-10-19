@@ -297,6 +297,18 @@ body {
   padding-right: 45px;
 }
 
+.password-input::-ms-reveal {
+  display: none;
+}
+
+.password-input::-webkit-credentials-auto-fill-button {
+  display: none !important;
+}
+
+.password-input::-webkit-textfield-decoration-container {
+  display: none !important;
+}
+
 .password-toggle {
   position: absolute;
   right: 12px;
@@ -393,6 +405,32 @@ body {
 .form-input.error:focus, .form-select.error:focus {
   border-color: var(--female-color);
   box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.3);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--input-bg);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary);
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-secondary) var(--input-bg);
 }
 
 /* Responsive Design */
