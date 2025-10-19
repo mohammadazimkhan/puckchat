@@ -3,7 +3,10 @@
 error_log
 
 # Configuration files with sensitive data
-includes/config.php
+includes/config-prod.php
+
+# Log files
+logs/*.log
 
 # Temporary files
 *.tmp

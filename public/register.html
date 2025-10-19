@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - PuckChat</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+    <div class="auth-card">
+        <!-- Logo/Header -->
+        <div class="logo-header">
+            <div class="logo-circle">
+                <span class="logo-letter">P</span>
+            </div>
+            <h1 class="logo-title">PuckChat</h1>
+            <p class="logo-subtitle">Create your account to get started</p>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="registerForm">
+            <div class="form-group">
+                <input type="text" id="username" name="username" required
+                       class="form-input"
+                       placeholder="Username">
+                <div class="validation-message" id="username-error"></div>
+            </div>
+
+            <div class="form-group password-group">
+                <input type="password" id="password" name="password" required
+                       class="form-input password-input"
+                       placeholder="Password">
+                <span class="password-toggle" onclick="togglePassword('password')">
+                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none">
+                        <path class="eye-open" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <circle class="eye-open" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path class="eye-closed" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <line class="eye-closed" x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </span>
+                <div class="validation-message" id="password-error"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="gender-buttons">
+                    <input type="hidden" id="gender" name="gender" value="male">
+                    <button type="button" class="gender-btn male-btn active" onclick="selectGender('male')">
+                        Male
+                    </button>
+                    <button type="button" class="gender-btn female-btn" onclick="selectGender('female')">
+                        Female
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <select id="country" name="country" required class="form-select">
+                    <option value="">Country</option>
+                    <option value="AU">Australia</option>
+                    <option value="BD">Bangladesh</option>
+                    <option value="BR">Brazil</option>
+                    <option value="CA">Canada</option>
+                    <option value="CN">China</option>
+                    <option value="FR">France</option>
+                    <option value="DE">Germany</option>
+                    <option value="IN">India</option>
+                    <option value="JP">Japan</option>
+                    <option value="PK">Pakistan</option>
+                    <option value="AE">United Arab Emirates</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="US">United States</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select id="state" name="state" required disabled class="form-select">
+                    <option value="">State/Province</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                Create Account
+            </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="mt-6 text-center">
+            <a href="login.html" class="link-primary">Already have an account?</a>
+        </div>
+
+        <!-- Continue as Guest -->
+        <div class="mt-4 text-center">
+            <a href="index.php" class="link-secondary">
+                Continue as Guest
+            </a>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Country-State data
+        const countryStates = {
+            'US': ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'],
+            'IN': ['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry'],
+            'PK': ['Balochistan', 'Khyber Pakhtunkhwa', 'Punjab', 'Sindh', 'Azad Kashmir', 'Gilgit-Baltistan', 'Islamabad Capital Territory'],
+            'BD': ['Barisal', 'Chittagong', 'Dhaka', 'Khulna', 'Mymensingh', 'Rajshahi', 'Rangpur', 'Sylhet'],
+            'AE': ['Abu Dhabi', 'Dubai', 'Sharjah', 'Ajman', 'Umm Al Quwain', 'Ras Al Khaimah', 'Fujairah'],
+            'CA': ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon'],
+            'GB': ['England', 'Scotland', 'Wales', 'Northern Ireland'],
+            'AU': ['New South Wales', 'Victoria', 'Queensland', 'Western Australia', 'South Australia', 'Tasmania', 'Australian Capital Territory', 'Northern Territory'],
+            'DE': ['Baden-Württemberg', 'Bavaria', 'Berlin', 'Brandenburg', 'Bremen', 'Hamburg', 'Hesse', 'Lower Saxony', 'Mecklenburg-Vorpommern', 'North Rhine-Westphalia', 'Rhineland-Palatinate', 'Saarland', 'Saxony', 'Saxony-Anhalt', 'Schleswig-Holstein', 'Thuringia'],
+            'FR': ['Auvergne-Rhône-Alpes', 'Bourgogne-Franche-Comté', 'Brittany', 'Centre-Val de Loire', 'Corsica', 'Grand Est', 'Hauts-de-France', 'Île-de-France', 'Normandy', 'Nouvelle-Aquitaine', 'Occitania', 'Pays de la Loire', 'Provence-Alpes-Côte d\'Azur'],
+            'BR': ['Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal', 'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul', 'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí', 'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia', 'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins'],
+            'JP': ['Hokkaido', 'Aomori', 'Iwate', 'Miyagi', 'Akita', 'Yamagata', 'Fukushima', 'Ibaraki', 'Tochigi', 'Gunma', 'Saitama', 'Chiba', 'Tokyo', 'Kanagawa', 'Niigata', 'Toyama', 'Ishikawa', 'Fukui', 'Yamanashi', 'Nagano', 'Gifu', 'Shizuoka', 'Aichi', 'Mie', 'Shiga', 'Kyoto', 'Osaka', 'Hyogo', 'Nara', 'Wakayama', 'Tottori', 'Shimane', 'Okayama', 'Hiroshima', 'Yamaguchi', 'Tokushima', 'Kagawa', 'Ehime', 'Kochi', 'Fukuoka', 'Saga', 'Nagasaki', 'Kumamoto', 'Oita', 'Miyazaki', 'Kagoshima', 'Okinawa'],
+            'CN': ['Beijing', 'Tianjin', 'Hebei', 'Shanxi', 'Inner Mongolia', 'Liaoning', 'Jilin', 'Heilongjiang', 'Shanghai', 'Jiangsu', 'Zhejiang', 'Anhui', 'Fujian', 'Jiangxi', 'Shandong', 'Henan', 'Hubei', 'Hunan', 'Guangdong', 'Guangxi', 'Hainan', 'Chongqing', 'Sichuan', 'Guizhou', 'Yunnan', 'Tibet', 'Shaanxi', 'Gansu', 'Qinghai', 'Ningxia', 'Xinjiang', 'Hong Kong', 'Macau']
+        };
+
+        // Handle country selection
+        document.getElementById('country').addEventListener('change', function() {
+            const country = this.value;
+            const stateSelect = document.getElementById('state');
+            
+            // Clear existing options
+            stateSelect.innerHTML = '<option value="">State/Province</option>';
+            
+            if (country && countryStates[country]) {
+                // Enable state dropdown
+                stateSelect.disabled = false;
+                
+                // Add states for selected country
+                countryStates[country].forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+            } else {
+                // Disable state dropdown
+                stateSelect.disabled = true;
+            }
+        });
+
+        // Validation functions
+        function validateUsername(username) {
+            const usernameRegex = /^[a-zA-Z0-9._]{3,30}$/;
+            const consecutiveDotsRegex = /\.{2,}/;
+            const startEndRegex = /^[._]|[._]$/;
+            
+            if (!username) return 'Username is required';
+            if (username.length < 3) return 'Username must be at least 3 characters';
+            if (username.length > 30) return 'Username must be less than 30 characters';
+            if (!usernameRegex.test(username)) return 'Username can only contain letters, numbers, periods, and underscores';
+            if (consecutiveDotsRegex.test(username)) return 'Username cannot have consecutive periods';
+            if (startEndRegex.test(username)) return 'Username cannot start or end with periods or underscores';
+            return '';
+        }
+        
+        function validatePassword(password) {
+            if (!password) return 'Password is required';
+            if (password.length < 6) return 'Password must be at least 6 characters';
+            return '';
+        }
+        
+        function showError(fieldId, message) {
+            const errorDiv = document.getElementById(fieldId + '-error');
+            const field = document.getElementById(fieldId);
+            
+            if (message) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                field.classList.add('error');
+            } else {
+                errorDiv.textContent = '';
+                errorDiv.style.display = 'none';
+                field.classList.remove('error');
+            }
+        }
+        
+        // Real-time validation with availability check
+        let usernameTimeout;
+        document.getElementById('username').addEventListener('input', function() {
+            const username = this.value;
+            const error = validateUsername(username);
+            
+            if (error) {
+                showError('username', error);
+                return;
+            }
+            
+            // Clear previous timeout
+            clearTimeout(usernameTimeout);
+            
+            // Check availability after 500ms delay
+            usernameTimeout = setTimeout(() => {
+                if (username.length >= 3) {
+                    checkUsernameAvailability(username);
+                }
+            }, 500);
+        });
+        
+        function checkUsernameAvailability(username) {
+            const formData = new FormData();
+            formData.append('username', username);
+            
+            fetch('api/check-username.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.available) {
+                    showError('username', '');
+                    document.getElementById('username-error').innerHTML = '<span style="color: green;">✅ Username available</span>';
+                    document.getElementById('username-error').style.display = 'block';
+                } else {
+                    showError('username', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error checking username:', error);
+            });
+        }
+        
+        document.getElementById('password').addEventListener('input', function() {
+            const error = validatePassword(this.value);
+            showError('password', error);
+        });
+        
+        // Form validation and submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Basic validation
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const gender = document.getElementById('gender').value;
+            const country = document.getElementById('country').value;
+            const state = document.getElementById('state').value;
+            
+            if (!username || !password || !gender || !country || !state) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            const formData = new FormData(this);
+            
+            fetch('api/register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data);
+                if (data.success) {
+                    window.location.href = 'dashboard.php';
+                } else {
+                    alert('Registration failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Registration failed. Please try again.');
+            });
+        });
+        
+        // Gender button selection
+        function selectGender(gender) {
+            const hiddenInput = document.getElementById('gender');
+            const maleBtn = document.querySelector('.male-btn');
+            const femaleBtn = document.querySelector('.female-btn');
+            
+            hiddenInput.value = gender;
+            
+            if (gender === 'male') {
+                maleBtn.classList.add('active');
+                femaleBtn.classList.remove('active');
+            } else {
+                femaleBtn.classList.add('active');
+                maleBtn.classList.remove('active');
+            }
+        }
+        
+        // Password toggle functionality
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const toggle = field.nextElementSibling;
+            const eyeOpen = toggle.querySelectorAll('.eye-open');
+            const eyeClosed = toggle.querySelectorAll('.eye-closed');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                eyeOpen.forEach(el => el.style.display = 'none');
+                eyeClosed.forEach(el => el.style.display = 'block');
+            } else {
+                field.type = 'password';
+                eyeOpen.forEach(el => el.style.display = 'block');
+                eyeClosed.forEach(el => el.style.display = 'none');
+            }
+        }
+    </script>
+</body>
+</html>
